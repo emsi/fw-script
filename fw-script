@@ -1,6 +1,18 @@
 #! /bin/sh
 RULESFILE="/etc/firewall.rules"
 
+TEMP=`getopt -o v --long verbose -n 'fw-script' -- "$@"`
+eval set -- "$TEMP"
+
+while true ; do
+	case "$1" in
+		-v|--verbose) VERBOSE="1"; shift ;;
+
+		--) shift ; break;;
+		*) echo "ERROR!"; exit 1 ;;
+	esac
+done
+
 if [ ! -f $RULESFILE ]; then
 	echo "Rules file: $RULESFILE not found!"
 	exit 1;
@@ -24,6 +36,6 @@ s/[	 ]\+/_/g
 
 for i in $RULES; do
 	LINE=`echo $i| sed -e 's/_/ /g'`
-	echo iptables $LINE
+	if [ "$VERBOSE" == "1" ]; then echo iptables $LINE; fi
 	#iptables $LINE
 done
