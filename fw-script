@@ -1,13 +1,25 @@
 #! /bin/sh
 RULESFILE="/etc/firewall.rules"
 
-TEMP=`getopt -o v --long verbose -n 'fw-script' -- "$@"`
+usage() {
+	echo Usage
+	echo
+	echo 'fw-script [OPTION]...'
+	echo 
+	echo OPTIONS:
+	echo '-v, --verbose        Display executed iptables commands'
+	echo '-h, --help           Display this text and exit'
+	echo
+	exit
+}
+
+TEMP=`getopt -o vh --long verbose,help -n 'fw-script' -- "$@"`
 eval set -- "$TEMP"
 
 while true ; do
 	case "$1" in
 		-v|--verbose) VERBOSE="1"; shift ;;
-
+		-h|--help) usage; shift ;;
 		--) shift ; break;;
 		*) echo "ERROR!"; exit 1 ;;
 	esac
