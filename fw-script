@@ -1,0 +1,29 @@
+#! /bin/sh
+RULESFILE="/etc/firewall.rules"
+
+if [ ! -f $RULESFILE ]; then
+	echo "Rules file: $RULESFILE not found!"
+	exit 1;
+fi
+
+# Feed in and replace rules
+RULES=`sed -e '
+s/$SNEW/-m state --state NEW/g
+s/$FWD/FORWARD/g
+s/$TCP/-p tcp --dport/g
+s/$UDP/-p udp --dport/g
+s/$SNAT/-t nat -j SNAT --to/g
+s/$DNAT/-t nat -j DNAT --to/g
+
+
+s/#.*//
+/\\\/N
+s/\\\\\n/_/g
+s/[	 ]\+/_/g
+' $RULESFILE`
+
+for i in $RULES; do
+	LINE=`echo $i| sed -e 's/_/ /g'`
+	echo iptables $LINE
+	#iptables $LINE
+done
