@@ -32,18 +32,20 @@ fi
 
 # Feed in and replace rules
 RULES=`sed -e '
-s/$SNEW/-m state --state NEW/g
-s/$FWD/FORWARD/g
-s/$TCP/-p tcp --dport/g
-s/$UDP/-p udp --dport/g
-s/$SNAT/-t nat -j SNAT --to/g
-s/$DNAT/-t nat -j DNAT --to/g
+s/#.*//				# Remove comments
+/\\\/N				# Join lines ending with backslash
 
+s/\$SNEW/-m state --state NEW/	# Replace macros
+s/\$TCP/-p tcp --dport/
+s/\$UDP/-p udp --dport/
+s/\$MTCP/-p tcp -m multiport --dports/
+s/\$MUDP/-p udp -m multiport --dports/
+s/\$SNAT/-t nat -j SNAT --to/
+s/\$DNAT/-t nat -j DNAT --to/
 
-s/#.*//
-/\\\/N
-s/\\\\\n/_/g
-s/[	 ]\+/_/g
+s/\\\\\n/_/g			# Replace newlines with underscores
+s/[	 ]\+/_/g		# Replace whitespaces with underscores
+
 ' $RULESFILE`
 
 for i in $RULES; do
