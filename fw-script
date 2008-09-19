@@ -40,6 +40,7 @@ s/\$TCP/-p tcp --dport/
 s/\$UDP/-p udp --dport/
 s/\$MTCP/-p tcp -m multiport --dports/
 s/\$MUDP/-p udp -m multiport --dports/
+s/\$NAT/-t nat/
 s/\$SNAT/-t nat -j SNAT --to/
 s/\$DNAT/-t nat -j DNAT --to/
 
