@@ -44,6 +44,7 @@ s/\$SNEW/-m state --state NEW/	# Replace macros
 s/\$TCP/-p tcp --dport/
 s/\$UDP/-p udp --dport/
 s/\$ICMP/-p icmp --icmp-type/
+s/\$ICMPV6/-p icmp --icmpv6-type/
 s/\$MTCP/-p tcp -m multiport --dports/
 s/\$MUDP/-p udp -m multiport --dports/
 s/\$NAT/-t nat/
