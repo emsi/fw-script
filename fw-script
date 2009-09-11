@@ -43,8 +43,8 @@ s/#.*//				# Remove comments
 s/\$SNEW/-m state --state NEW/	# Replace macros
 s/\$TCP/-p tcp --dport/
 s/\$UDP/-p udp --dport/
+s/\$ICMPV6/-p icmpv6 --icmpv6-type/
 s/\$ICMP/-p icmp --icmp-type/
-s/\$ICMPV6/-p icmp --icmpv6-type/
 s/\$MTCP/-p tcp -m multiport --dports/
 s/\$MUDP/-p udp -m multiport --dports/
 s/\$NAT/-t nat/
@@ -58,6 +58,6 @@ s/[	 ]\+/_/g		# Replace whitespaces with underscores
 
 for i in $RULES; do
 	LINE=`echo $i| sed -e 's/_/ /g'`
-	if [ "$VERBOSE" == "1" ]; then echo iptables $LINE; fi
+	if [ "$VERBOSE" == "1" ]; then echo $IPTABLES $LINE; fi
 	$IPTABLES $LINE
 done
