@@ -15,12 +15,14 @@ usage() {
 	exit
 }
 
-TEMP=`getopt -o vh --long verbose,help -n 'fw-script' -- "$@"`
+TEMP=`getopt -o vh6 --long verbose,help,ipv6 -n 'fw-script' -- "$@"`
 eval set -- "$TEMP"
 
 while true ; do
 	case "$1" in
-		-6|--ipv6) IPTABLES="ip6tables"; shift ;;
+		-6|--ipv6) IPTABLES="ip6tables"; 
+			RULESFILE="/etc/firewall6.rules"
+			shift ;;
 		-v|--verbose) VERBOSE="1"; shift ;;
 		-h|--help) usage; shift ;;
 		--) shift ; break;;
