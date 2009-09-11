@@ -1,4 +1,5 @@
 #! /bin/sh
+IPTABLES=iptables
 RULESFILE="/etc/firewall.rules"
 
 usage() {
@@ -7,6 +8,7 @@ usage() {
 	echo 'fw-script [OPTION]...'
 	echo 
 	echo OPTIONS:
+	echo '-6, --ipv6           Use ip6tables'
 	echo '-v, --verbose        Display executed iptables commands'
 	echo '-h, --help           Display this text and exit'
 	echo
@@ -18,6 +20,7 @@ eval set -- "$TEMP"
 
 while true ; do
 	case "$1" in
+		-6|--ipv6) IPTABLES="ip6tables"; shift ;;
 		-v|--verbose) VERBOSE="1"; shift ;;
 		-h|--help) usage; shift ;;
 		--) shift ; break;;
@@ -53,5 +56,5 @@ s/[	 ]\+/_/g		# Replace whitespaces with underscores
 for i in $RULES; do
 	LINE=`echo $i| sed -e 's/_/ /g'`
 	if [ "$VERBOSE" == "1" ]; then echo iptables $LINE; fi
-	#iptables $LINE
+	$IPTABLES $LINE
 done
