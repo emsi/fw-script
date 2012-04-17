@@ -50,6 +50,7 @@ s/\$MUDP/-p udp -m multiport --dports/
 s/\$NAT/-t nat/
 s/\$SNAT/-t nat -j SNAT --to/
 s/\$DNAT/-t nat -j DNAT --to/
+s/\$NETMAP/-t nat -j NETMAP --to/
 
 s/\\\\\n/_/g			# Replace newlines with underscores
 s/[	 ]\+/_/g		# Replace whitespaces with underscores
