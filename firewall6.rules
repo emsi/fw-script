@@ -1,0 +1,47 @@
+# flush all policies, set up default forward policy
+-F
+-X
+-P FORWARD DROP
+-P INPUT ACCEPT
+
+
+# Filter Unreachable/Invalid route for NAT-PT
+-A FORWARD	-d 2000:ffff::/32				-j DROP
+
+# Let the statefull work
+-A FORWARD	-m state --state ESTABLISHED,RELATED		-j ACCEPT
+-A INPUT	-m state --state ESTABLISHED,RELATED		-j ACCEPT
+
+# === Custom From-* chains
+# == From Known IPs
+-N F-KNOWN
+# == From my aiccu
+-A F-KNOWN	-s 2001:6a1:201:132::2				-j ACCEPT
+-A F-KNOWN	-s 2001:6a1:201:8132::1/64			-j ACCEPT
+# road warrior
+-A F-KNOWN	-s 2001:6a1:201:342::2/64			-j ACCEPT
+# teredo
+-A F-KNOWN	-s 2001:0:5ef5:79fd:108d:dc0:3f57:fefb		-j ACCEPT
+
+
+################################################################################
+# === Input Rules
+-A INPUT							-j F-KNOWN
+
+# DEFAULT POLICY
+-A INPUT						-p tcp	-j REJECT
+-A INPUT						-p udp	-j DROP
+
+################################################################################
+# === Main Chains
+
+-N VLAN126
+-A FORWARD					-i vlan126	-j VLAN126
+-A VLAN126							-j F-KNOWN
+-A VLAN126	-d 2001:4191:8014:ff01::1/64			-j ACCEPT
+
+-A FORWARD					-i vlan88	-j ACCEPT
+
+# DEFAULT POLICY
+-A FORWARD							-j REJECT
+
