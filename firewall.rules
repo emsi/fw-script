@@ -1,0 +1,39 @@
+# flush all policies, set up default forward policy
+-F
+-X
+-F -t nat
+-X -t nat
+-F -t mangle
+-X -t mangle
+-P FORWARD DROP
+
+
+# Let the statefull work
+-A FORWARD	-m state --state ESTABLISHED,RELATED		-j ACCEPT
+
+# === Custom TO-* chains
+
+# == To Servers
+-N TO-SERV
+-A TO-SERV	-d 192.168.0.0/24				-j ACCEPT
+-A TO-SERV	-d 192.168.20.0/24				-j ACCEPT
+
+
+
+################################################################################
+# === Main Chains
+
+# === From networks on local interfaces 
+
+# == Full allow from following local networks
+-A FORWARD	-s 192.168.3.0/24	-i vlan3	$SNEW	-j ACCEPT
+-A FORWARD	-s 192.168.4.0/24	-i vlan4	$SNEW	-j ACCEPT
+
+# == Allow SERV-0 from following networks
+-A FORWARD				-i vlan5	$SNEW	-j TO-SERV-0
+
+
+
+# Default policy
+-A FORWARD							-j REJECT
+
