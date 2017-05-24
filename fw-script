@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 IPTABLES=iptables
 RULESFILE="/etc/firewall.rules"
 
