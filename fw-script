@@ -38,6 +38,7 @@ fi
 # Feed in and replace rules
 RULES=`sed -e '
 s/#.*//				# Remove comments
+/^$/d				# Remove empty lines
 /\\\/N				# Join lines ending with backslash
 
 s/\$SNEW/-m state --state NEW/	# Replace macros
@@ -51,14 +52,14 @@ s/\$NAT/-t nat/
 s/\$SNAT/-t nat -j SNAT --to/
 s/\$DNAT/-t nat -j DNAT --to/
 s/\$NETMAP/-t nat -j NETMAP --to/
+s/\$MASQ/-t nat -j MASQUERADE/
 
 s/\\\\\n/_/g			# Replace newlines with underscores
-s/[	 ]\+/_/g		# Replace whitespaces with underscores
+s/\s\+/ /g			# Replace whitespaces with space
 
 ' $RULESFILE`
 
-for i in $RULES; do
-	LINE=`echo $i| sed -e 's/_/ /g'`
+while read -r LINE; do
 	if [ "$VERBOSE" == "1" ]; then echo $IPTABLES $LINE; fi
 	$IPTABLES $LINE
-done
+done <<< "$RULES"
