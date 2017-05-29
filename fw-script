@@ -54,8 +54,8 @@ s/\$DNAT/-t nat -j DNAT --to/
 s/\$NETMAP/-t nat -j NETMAP --to/
 s/\$MASQ/-t nat -j MASQUERADE/
 
-s/\\\\\n/_/g			# Replace newlines with underscores
-s/\s\+/ /g			# Replace whitespaces with space
+s/\\\\\n/ /g			# Replace newlines with spaces
+#s/\s\+/ /g			# Replace whitespaces with space
 
 ' $RULESFILE`
 
